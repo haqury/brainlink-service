@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/aUdpService.iml" filepath="$PROJECT_DIR$/.idea/aUdpService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/brainlink-serviceUdp.iml" filepath="$PROJECT_DIR$/.idea/brainlink-serviceUdp.iml" />
     </modules>
   </component>
 </project>

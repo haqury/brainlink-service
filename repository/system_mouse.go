@@ -9,7 +9,8 @@ import (
 type ISystemMouseRepository interface {
 	//Get(ctx context.Context, id int) (*entity.Test, error)
 	//List(ctx context.Context) ([]*entity.Test, error)
-	Add(ctx context.Context, t *entity.SystemInfo) (*entity.SystemInfo, error)
+	ListByIds(ctx context.Context, ids []int64) ([]*entity.SystemInfo, error)
+	Add(ctx context.Context, e *entity.SystemInfo) (*entity.SystemInfo, error)
 	//Delete(ctx context.Context, id int) (bool, error)
 }
 type SystemMouseRepository struct {
@@ -34,29 +35,31 @@ func NewSystemMouseRepository(d *db.DB) *SystemMouseRepository {
 //
 //	return &e, nil
 //}
-//
-//func (r *Repository) List(ctx context.Context) ([]*entity.Test, error) {
-//	var d []*entity.Test
-//
-//	//rows, err := r.db.Client.Query(ctx, "SELECT id, status FROM test WHERE deleted_at IS NULL")
-//
-//	//if err != nil {
-//	//	return nil, err
-//	//}
-//
-//	//for rows.Next() {
-//	//	var e entity.Test
-//	//	err := rows.Scan(&e.Id, &e.Status)
-//
-//	//	if err != nil {
-//	//		return nil, err
-//	//	}
-//
-//	//	d = append(d, e)
-//	//}
-//
-//	return d, nil
-//}
+
+func (r *SystemMouseRepository) ListByIds(ctx context.Context, ids []int64) ([]*entity.SystemInfo, error) {
+	var d []*entity.SystemInfo
+
+	idss := entity.NewIds(ids)
+	rows, err := r.db.Client.Query(ctx, "SELECT id, x, y, tox, toy, endx, endy FROM brainlink.system_mouse"+
+		idss.WhereIn("id"))
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var e entity.SystemInfo
+		err := rows.Scan(&e.Id, &e.X, &e.Y, &e.ToX, &e.ToY, &e.EndX, &e.EndY)
+
+		if err != nil {
+			return nil, err
+		}
+
+		d[e.Id] = &e
+	}
+
+	return d, nil
+}
 
 func (r *SystemMouseRepository) Add(ctx context.Context, e *entity.SystemInfo) (*entity.SystemInfo, error) {
 	err := r.db.Client.

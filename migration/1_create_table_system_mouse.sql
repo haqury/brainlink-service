@@ -12,6 +12,8 @@ CREATE TABLE brainlink.system_mouse
 
 );
 
+create sequence brainlink.system_mouse_id_seq;
+
 COMMENT ON TABLE brainlink.system_mouse IS 'mouse position';
 
 COMMENT ON Column brainlink.system_mouse.X IS 'mouse the value of the x level';

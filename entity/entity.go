@@ -4,8 +4,8 @@ import "fmt"
 
 type EegDto struct {
 	Id     int
-	Input  *EegHistoryModel
-	System *SystemInfo
+	Input  EegHistoryModel
+	System SystemInfo
 }
 
 type EegHistoryModel struct {

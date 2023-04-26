@@ -7,6 +7,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.1
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.8
+	github.com/lihao1988/php2go v1.2.1
 )
 
 require (

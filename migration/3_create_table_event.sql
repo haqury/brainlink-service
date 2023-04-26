@@ -1,20 +1,10 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE brainlink.eeg_history
+CREATE TABLE brainlink.event_eeg
 (
-    id         bigint NOT NULL,
-    Attention  INTEGER, -- an integer representing the value of the attention level
-    Meditation INTEGER, -- an integer representing the value of the meditation level
-    Signal     INTEGER, -- an integer representing the value of the signal level
-    Delta      INTEGER, -- an integer representing the value of the delta level
-    Theta      INTEGER, -- an integer representing the value of the theta level
-    LowAlpha   INTEGER, -- an integer representing the value of the low alpha level
-    HighAlpha  INTEGER, -- an integer representing the value of the high alpha level
-    LowBeta    INTEGER, -- an integer representing the value of the low beta level
-    HighBeta   INTEGER, -- an integer representing the value of the high beta level
-    LowGamma   INTEGER, -- an integer representing the value of the low gamma level
-    HighGamma  INTEGER,  -- an integer representing the value of the high gamma level
-    system_mouse_id bigint NOT NULL
+    id         bigint default NOT NULL,
+    eeg_history_ids jsonb,
+    asset
 );
 
 create sequence brainlink.eeg_history_id_seq;

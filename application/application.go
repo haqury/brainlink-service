@@ -35,12 +35,12 @@ func Get() (*Application, error) {
 	s := service.NewBrainlinkService(r, systemMouseRepository)
 
 	p, conn := getConn("0.0.0.0", 1234)
-	listEEG(conn, p, r)
+	listEEG(conn, p, s)
 
 	return app, nil
 }
 
-func listEEG(conn *net.UDPConn, p []byte, r *repository.Repository) {
+func listEEG(conn *net.UDPConn, p []byte, s service.IBrainlinkService) {
 	for {
 		n, _, err := conn.ReadFromUDP(p)
 
@@ -54,7 +54,7 @@ func listEEG(conn *net.UDPConn, p []byte, r *repository.Repository) {
 		if err != nil {
 			panic(err)
 		}
-		r.Add(context.Background(), model.Input)
+		s.Add(context.Background(), &model)
 		fmt.Println(model)
 	}
 }

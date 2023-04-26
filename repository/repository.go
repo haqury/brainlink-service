@@ -71,7 +71,7 @@ func (r *Repository) List(ctx context.Context) ([]*entity.EegHistoryModel, error
 
 func (r *Repository) Add(ctx context.Context, e *entity.EegHistoryModel) (*entity.EegHistoryModel, error) {
 	err := r.db.Client.
-		QueryRow(ctx, "INSERT INTO brainlink.eeg_history(attention, meditation, signal, delta, theta, lowalpha, highalpha, lowbeta, highbeta, lowgamma, highgamma, system_mouse_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+		QueryRow(ctx, "INSERT INTO brainlink.eeg_history(attention, meditation, signal, delta, theta, lowalpha, highalpha, lowbeta, highbeta, lowgamma, highgamma, system_mouse_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
 			&e.Attention,
 			&e.Meditation,
 			&e.Signal,

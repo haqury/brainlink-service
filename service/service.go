@@ -8,8 +8,8 @@ import (
 
 type IBrainlinkService interface {
 	//Get(ctx context.Context, id int) (*entity.EegDto, error)
-	List(ctx context.Context) ([]*entity.EegDto, error)
-	Add(ctx context.Context, message *entity.EegDto) (*entity.EegDto, error)
+	List(ctx context.Context) ([]*entity.EegHistoryModel, error)
+	Add(ctx context.Context, m *entity.EegDto) (*entity.EegDto, error)
 	//DeleteTest(ctx context.Context, id int) (bool, error)
 }
 type BrainlinkService struct {
@@ -17,7 +17,7 @@ type BrainlinkService struct {
 	systemMouseRepository repository.ISystemMouseRepository
 }
 
-func NewBrainlinkService(r repository.IRepository, systemMouseRepository repository.ISystemMouseRepository) *BrainlinkService {
+func NewBrainlinkService(r repository.IRepository, systemMouseRepository repository.ISystemMouseRepository) IBrainlinkService {
 	return &BrainlinkService{r, systemMouseRepository}
 }
 
@@ -30,13 +30,18 @@ func (s *BrainlinkService) List(ctx context.Context) ([]*entity.EegHistoryModel,
 }
 
 func (s *BrainlinkService) Add(ctx context.Context, m *entity.EegDto) (*entity.EegDto, error) {
-	var err error
-	m.System, err = s.systemMouseRepository.Add(ctx, m.System)
+	system, err := s.systemMouseRepository.Add(ctx, &m.System)
+	if system != nil {
+		m.System = *system
+	}
 	if err != nil {
 		return nil, err
 	}
 	m.Input.SystemMouseId = &m.System.Id
-	m.Input, err = s.r.Add(ctx, m.Input)
+	input, err := s.r.Add(ctx, &m.Input)
+	if input != nil {
+		m.Input = *input
+	}
 	if err != nil {
 		return nil, err
 	}
