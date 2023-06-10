@@ -2,14 +2,19 @@ package service
 
 import (
 	"context"
-	"github.com/lihao1988/php2go/array"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
 	"v1/entity"
 	"v1/repository"
 )
 
 type IBuilderMap interface {
-	Get(ctx context.Context) (*entity.Map, error)
+	Get(ctx context.Context) ([]*entity.Event, error)
+	Handle(w http.ResponseWriter, r *http.Request)
+	HandleEvent(w http.ResponseWriter, r *http.Request)
 }
+
 type BuilderMap struct {
 	r                     repository.IRepository
 	systemMouseRepository repository.ISystemMouseRepository
@@ -23,28 +28,44 @@ func NewBuilderMap(r repository.IRepository, systemMouseRepository repository.IS
 //	return s.r.Get(ctx, id)
 //}
 
-func (s *BuilderMap) Get(ctx context.Context) (*entity.Map, error) {
-	events, err := s.getEvents(ctx)
+func (s BuilderMap) Handle(w http.ResponseWriter, r *http.Request) {
+	// Парсим тело запроса
+	_, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		return nil, err
+		http.Error(w, "Error reading request body",
+			http.StatusInternalServerError)
 	}
-	return s.GetMap(events, &entity.BuildConfig{})
+	defer r.Body.Close()
+
+	// Выводим тело запроса в консоль
+	m, _ := s.Get(context.Background())
+	d, _ := json.Marshal(m)
+	w.Write(d)
 }
 
-func (s *BuilderMap) GetMap(e []*entity.Event, config *entity.BuildConfig) (*entity.Map, error) {
-	m := entity.Map{}
-	for _, event := range e {
-		m.AddEvent(*event)
+func (s BuilderMap) HandleEvent(w http.ResponseWriter, r *http.Request) {
+	// Парсим тело запроса
+	_, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body",
+			http.StatusInternalServerError)
 	}
-	return m, nil
+	defer r.Body.Close()
+
+	// Выводим тело запроса в консоль
+	m, _ := s.GetEvents(context.Background())
+	d, _ := json.Marshal(m)
+	w.Write(d)
 }
 
-func (s *BuilderMap) getEvents(ctx context.Context) ([]*entity.Event, error) {
+func (s *BuilderMap) GetEvents(ctx context.Context) ([]*entity.Event, error) {
 	events := []*entity.Event{}
-	event := entity.Event{}
-	m, err := s.r.List(ctx)
+	event := &entity.Event{}
+	m, err := s.r.ListUseEvent(ctx)
 	ids := []int64{}
-	array.Column(ids, m, "SystemMouseId", "")
+	for _, mm := range m {
+		ids = append(ids, *mm.SystemMouseId)
+	}
 	sm, err := s.systemMouseRepository.ListByIds(ctx, ids)
 	for _, model := range m {
 		dto := &entity.EegDto{
@@ -52,8 +73,10 @@ func (s *BuilderMap) getEvents(ctx context.Context) ([]*entity.Event, error) {
 			Input:  *model,
 			System: *sm[*model.SystemMouseId],
 		}
-		if s.setEvent(dto, &event) && event.EegDto != nil {
-			events = append(events, &event)
+		dto.EventName = *model.EventName
+		event = s.setEvent(*dto, event)
+		if event != nil {
+			events = append(events, event)
 		}
 	}
 	if err != nil {
@@ -63,21 +86,68 @@ func (s *BuilderMap) getEvents(ctx context.Context) ([]*entity.Event, error) {
 	return events, nil
 }
 
-func (s *BuilderMap) setEvent(model *entity.EegDto, event *entity.Event) bool {
+func (s *BuilderMap) GetMap(e []*entity.Event, config *entity.BuildConfig) (*entity.Map, error) {
+	m := entity.Map{}
+	for _, event := range e {
+		m.AddEvent(*event)
+	}
+	return &m, nil
+}
+
+func (s *BuilderMap) Get(ctx context.Context) ([]*entity.Event, error) {
+	events := []*entity.Event{}
+	event := &entity.Event{}
+	m, err := s.r.List(ctx)
+	ids := []int64{}
+	for _, mm := range m {
+		ids = append(ids, *mm.SystemMouseId)
+	}
+	sm, err := s.systemMouseRepository.ListByIds(ctx, ids)
+	for _, model := range m {
+		dto := &entity.EegDto{
+			Id:     0,
+			Input:  *model,
+			System: *sm[*model.SystemMouseId],
+		}
+		dto.EventName = *model.EventName
+		event = s.setEvent(*dto, event)
+		if event != nil {
+			events = append(events, event)
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return events, nil
+}
+
+func (s *BuilderMap) setEvent(model entity.EegDto, event *entity.Event) *entity.Event {
 	if event == nil || event.EegDto == nil {
 		event = &entity.Event{
 			Id:     0,
-			EegDto: []*entity.EegDto{model},
+			EegDto: []entity.EegDto{model},
 		}
 	}
 
-	e := event.EegDto[len(event.EegDto)]
-	if model.System.ToX-e.System.ToX > 0 ||
-		model.System.ToY-e.System.ToY > 0 {
-		event.EegDto = append(event.EegDto, model)
-		return true
+	e := event.EegDto[len(event.EegDto)-1]
+	if model.System.ToX*e.System.ToX == 0 ||
+		model.System.ToY*e.System.ToY == 0 {
+		return nil
 	}
-	return false
+
+	if model.System.ToX*e.System.ToX > 0 ||
+		model.System.ToY*e.System.ToY > 0 {
+		event.EegDto = append(event.EegDto, model)
+		return event
+	}
+
+	event = &entity.Event{
+		Id:     0,
+		EegDto: []entity.EegDto{model},
+	}
+	event.EegDto = append(event.EegDto, model)
+	return event
 }
 
 //

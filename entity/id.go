@@ -20,8 +20,8 @@ func NewIds(ids []int64) Ids {
 
 func (a Ids) WhereIn(column string) string {
 	var strs []string
-	for i, num := range a {
-		strs[i] = strconv.Itoa(int(num))
+	for _, num := range a {
+		strs = append(strs, strconv.Itoa(int(num)))
 	}
 	return fmt.Sprintf("WHERE %s IN (%s) ", column, strings.Join(strs, ", "))
 }

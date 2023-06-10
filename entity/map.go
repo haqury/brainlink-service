@@ -1,29 +1,26 @@
 package entity
 
-type Map struct {
-	Id   int
-	maps map[int]*reaction
-}
+type Map map[int]*Reaction
 
 func (m Map) AddEvent(event Event) error {
-	r := m.maps[event.EegDto[0].Input.LowAlpha]
+	r := m[event.EegDto[0].Input.LowAlpha]
 	if r == nil {
 		r = getReactionByEvent(event)
 	}
 	r.Events = append(r.Events, event)
-	m.maps[event.EegDto[0].Input.LowAlpha] = r
+	m[event.EegDto[0].Input.Meditation] = r
 	return nil
 }
 
-type reaction struct {
+type Reaction struct {
 	Action   string
 	Position [][2]int
 	Value    []string
 	Events   []Event
 }
 
-func getReactionByEvent(event Event) *reaction {
-	r := reaction{
+func getReactionByEvent(event Event) *Reaction {
+	r := Reaction{
 		Action:   "mouse",
 		Position: [][2]int{{event.EegDto[0].System.ToX, event.EegDto[0].System.ToY}},
 	}

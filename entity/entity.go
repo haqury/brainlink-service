@@ -3,9 +3,11 @@ package entity
 import "fmt"
 
 type EegDto struct {
-	Id     int
-	Input  EegHistoryModel
-	System SystemInfo
+	Id        int
+	Input     EegHistoryModel
+	System    SystemInfo
+	TypeId    int
+	EventName string
 }
 
 type EegHistoryModel struct {
@@ -21,6 +23,7 @@ type EegHistoryModel struct {
 	LowGamma      int
 	HighGamma     int
 	SystemMouseId *int64
+	EventName     *string
 }
 
 type SystemInfo struct {

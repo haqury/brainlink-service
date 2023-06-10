@@ -9,7 +9,7 @@ import (
 type ISystemMouseRepository interface {
 	//Get(ctx context.Context, id int) (*entity.Test, error)
 	//List(ctx context.Context) ([]*entity.Test, error)
-	ListByIds(ctx context.Context, ids []int64) ([]*entity.SystemInfo, error)
+	ListByIds(ctx context.Context, ids []int64) (map[int64]*entity.SystemInfo, error)
 	Add(ctx context.Context, e *entity.SystemInfo) (*entity.SystemInfo, error)
 	//Delete(ctx context.Context, id int) (bool, error)
 }
@@ -36,12 +36,13 @@ func NewSystemMouseRepository(d *db.DB) *SystemMouseRepository {
 //	return &e, nil
 //}
 
-func (r *SystemMouseRepository) ListByIds(ctx context.Context, ids []int64) ([]*entity.SystemInfo, error) {
-	var d []*entity.SystemInfo
+func (r *SystemMouseRepository) ListByIds(ctx context.Context, ids []int64) (map[int64]*entity.SystemInfo, error) {
+	d := map[int64]*entity.SystemInfo{}
 
 	idss := entity.NewIds(ids)
-	rows, err := r.db.Client.Query(ctx, "SELECT id, x, y, tox, toy, endx, endy FROM brainlink.system_mouse"+
-		idss.WhereIn("id"))
+	query := "SELECT id, x, y, tox, toy, endx, endy FROM brainlink.system_mouse " +
+		idss.WhereIn("id")
+	rows, err := r.db.Client.Query(ctx, query)
 
 	if err != nil {
 		return nil, err

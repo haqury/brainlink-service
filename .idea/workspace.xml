@@ -5,24 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d41e0d57-5ed7-4061-b918-3897cdafd96e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/entity/build_config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/entity/event.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/entity/map.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migration/3_create_table_event.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/builder_map.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/UdpService.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migration/3_CMD_meta_eeg_up.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/meta_generator.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/application.go" beforeDir="false" afterPath="$PROJECT_DIR$/application/application.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entity/entity.go" beforeDir="false" afterPath="$PROJECT_DIR$/entity/entity.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/entity/event.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entity/id.go" beforeDir="false" afterPath="$PROJECT_DIR$/entity/id.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migration/1_create_table_system_mouse.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migration/1_create_table_system_mouse.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migration/2_create_table_eeg_history.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migration/2_create_table_eeg_history.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/map.go" beforeDir="false" afterPath="$PROJECT_DIR$/entity/map.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migration/3_create_table_event.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migration/3_create_table_event.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repository/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/repository/repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repository/system_mouse.go" beforeDir="false" afterPath="$PROJECT_DIR$/repository/system_mouse.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/builder_map.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/builder_map.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,9 +53,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\USER\GolandProjects\brainlink-serviceUdp\entity" />
       <recent name="C:\Users\USER\GolandProjects\brainlink-serviceUdp\migration" />
       <recent name="C:\Users\USER\GolandProjects\brainlink-serviceUdp\service" />
+      <recent name="C:\Users\USER\GolandProjects\brainlink-serviceUdp\entity" />
     </key>
   </component>
   <component name="RunManager" selected="Go Build.go build v1">
@@ -113,12 +107,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/repository/system_mouse.go</url>
-          <line>65</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/repository/system_mouse.go</url>
-          <line>74</line>
+          <line>75</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -128,8 +117,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/repository/repository.go</url>
-          <line>102</line>
+          <line>146</line>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/service/builder_map.go</url>
+          <line>41</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/service/builder_map.go</url>
+          <line>121</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/entity/map.go</url>
+          <line>10</line>
+          <option name="timeStamp" value="47" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
